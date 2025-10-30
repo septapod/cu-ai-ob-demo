@@ -257,25 +257,28 @@
 
         .btn-primary {
             width: 100%;
-            background: var(--color-primary);
+            background: linear-gradient(135deg, var(--color-primary) 0%, #1F4557 100%);
             color: white;
             border: none;
             padding: var(--spacing-lg) var(--spacing-xl);
             font-size: 20px;
-            font-weight: 600;
-            border-radius: 6px;
+            font-weight: 700;
+            border-radius: 12px;
             cursor: pointer;
-            transition: background 0.3s ease, transform 0.2s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             line-height: 1.4;
+            box-shadow: 0 4px 15px rgba(44, 95, 124, 0.3);
+            letter-spacing: 0.5px;
         }
 
         .btn-primary:hover {
-            background: #1F4557;
-            transform: translateY(-2px);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(44, 95, 124, 0.4);
+            background: linear-gradient(135deg, #1F4557 0%, var(--color-primary) 100%);
         }
 
         .btn-primary:active {
-            transform: translateY(0);
+            transform: translateY(-2px);
         }
 
         /* ========================================
@@ -307,8 +310,15 @@
         .analysis-item {
             background: var(--color-white);
             border: 2px solid var(--color-border);
-            border-radius: 8px;
+            border-radius: 12px;
             padding: var(--spacing-xl);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .analysis-item:hover {
+            border-color: var(--color-accent);
+            box-shadow: 0 4px 16px rgba(52, 152, 219, 0.15);
         }
 
         .analysis-item-label {
@@ -414,10 +424,17 @@
         }
 
         .data-sources-panel, .ai-reasoning-panel {
-            background: var(--color-white);
-            border: 1px solid var(--color-border);
-            border-radius: 12px;
+            background: linear-gradient(135deg, var(--color-white) 0%, rgba(255, 255, 255, 0.95) 100%);
+            border: 2px solid var(--color-border);
+            border-radius: 16px;
             padding: var(--spacing-lg);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .data-sources-panel:hover, .ai-reasoning-panel:hover {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            border-color: var(--color-accent);
         }
 
         .panel-title {
@@ -431,25 +448,28 @@
         }
 
         .data-source-card {
-            background: var(--color-background);
+            background: linear-gradient(135deg, var(--color-background) 0%, rgba(248, 249, 250, 0.7) 100%);
             border: 2px solid var(--color-border);
-            border-radius: 8px;
+            border-radius: 12px;
             padding: var(--spacing-lg);
             margin-bottom: var(--spacing-lg);
             opacity: 0.4;
-            transition: all 0.5s ease;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         }
 
         .data-source-card:hover {
             border-color: var(--color-accent);
-            background: rgba(52, 152, 219, 0.05);
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.08) 0%, rgba(52, 152, 219, 0.04) 100%);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.1);
         }
 
         .data-source-card.loaded {
             opacity: 1;
             border-color: var(--color-success);
-            box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+            box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.15);
+            background: linear-gradient(135deg, rgba(39, 174, 96, 0.05) 0%, var(--color-background) 100%);
         }
 
         .data-source-card .checkmark {
@@ -863,25 +883,30 @@
 
         .btn-secondary {
             background: var(--color-white);
-            color: var(--color-accent);
-            border: 2px solid var(--color-accent);
+            color: var(--color-primary);
+            border: 2px solid var(--color-primary);
             padding: var(--spacing-md) var(--spacing-xl);
-            border-radius: 6px;
+            border-radius: 12px;
             cursor: pointer;
             font-size: 16px;
             font-weight: 700;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             line-height: 1.4;
+            box-shadow: 0 2px 8px rgba(44, 95, 124, 0.15);
+            letter-spacing: 0.3px;
         }
 
         .btn-secondary:hover {
-            background: var(--color-accent);
+            background: var(--color-primary);
             color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(44, 95, 124, 0.3);
         }
 
         .btn-secondary.active {
-            background: var(--color-accent);
+            background: var(--color-primary);
             color: white;
+            box-shadow: 0 4px 15px rgba(44, 95, 124, 0.3);
         }
 
         /* Expandable Section */
