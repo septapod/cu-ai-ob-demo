@@ -1154,7 +1154,7 @@
         }
 
         function loadAIData() {
-            // Load data source cards sequentially
+            // Load data source cards sequentially (Step 1)
             const sources = ['source-1', 'source-2', 'source-3', 'source-4', 'source-5'];
             sources.forEach((id, idx) => {
                 setTimeout(() => {
@@ -1162,10 +1162,13 @@
                 }, (idx + 1) * 800);
             });
 
-            // Load reasoning items sequentially
+            // Load reasoning items sequentially (Step 2) - starts after all sources are loaded
             const reasons = ['reason-1', 'reason-2', 'reason-3', 'reason-4', 'reason-5'];
+            const step1Complete = 5 * 800; // All sources loaded by 4000ms
+            const bufferTime = 800; // Add buffer after Step 1 completes
+
             reasons.forEach((id, idx) => {
-                const delay = 4500 + (idx * 600);
+                const delay = step1Complete + bufferTime + (idx * 600);
                 setTimeout(() => {
                     document.getElementById(id).style.animationDelay = '0s';
                     document.getElementById(id).style.opacity = '1';
