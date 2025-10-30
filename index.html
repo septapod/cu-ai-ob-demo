@@ -1465,8 +1465,6 @@
 
                 <!-- CONTROLS -->
                 <div class="controls">
-                    <button class="btn-secondary" onclick="toggleComparison()">Compare Systems</button>
-                    <button class="btn-secondary" onclick="toggleDetails()">View Data Sources</button>
                     <button class="btn-secondary" onclick="openVisualization()" style="background: rgba(241, 196, 15, 0.2); border-color: #F1C40F; color: #F39C12;">📊 View Flow Visualization</button>
                 </div>
             </div>
@@ -1597,20 +1595,6 @@
             } else {
                 content.classList.add('open');
                 toggle.classList.add('open');
-            }
-        }
-
-        function toggleComparison() {
-            const comparisonBox = document.querySelector('.comparison-box');
-            if (comparisonBox) {
-                comparisonBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }
-        }
-
-        function toggleDetails() {
-            const datasources = document.querySelector('.data-sources-panel');
-            if (datasources) {
-                datasources.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
         }
 
