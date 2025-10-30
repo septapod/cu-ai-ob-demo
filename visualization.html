@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Lending Demo - Flow Visualization</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1400px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .header p {
+            font-size: 24px;
+            opacity: 0.9;
+        }
+
+        .phase {
+            display: none;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        .phase.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* PHASE 1: OVERVIEW */
+        .flow-stages {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .stage {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideUp 0.8s ease forwards;
+        }
+
+        .stage:nth-child(1) { animation-delay: 0.2s; }
+        .stage:nth-child(2) { animation-delay: 0.8s; }
+        .stage:nth-child(3) { animation-delay: 1.4s; }
+        .stage:nth-child(4) { animation-delay: 2.0s; }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stage-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .stage-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .stage-desc {
+            font-size: 16px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .stage.decline {
+            background: rgba(231, 76, 60, 0.2);
+            border-color: rgba(231, 76, 60, 0.5);
+        }
+
+        .stage.approve {
+            background: rgba(39, 174, 96, 0.2);
+            border-color: rgba(39, 174, 96, 0.5);
+        }
+
+        .stage.impact {
+            background: rgba(241, 196, 15, 0.2);
+            border-color: rgba(241, 196, 15, 0.5);
+        }
+
+        /* PHASE 2: TECH BREAKDOWN */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .tech-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 40px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        .tech-section:nth-child(1) { animation-delay: 0.2s; }
+        .tech-section:nth-child(2) { animation-delay: 0.6s; }
+
+        .tech-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .tech-icon {
+            font-size: 48px;
+        }
+
+        .tech-title {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .tech-items {
+            display: grid;
+            gap: 16px;
+        }
+
+        .tech-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid rgba(255, 255, 255, 0.3);
+            opacity: 0;
+            animation: slideInLeft 0.5s ease forwards;
+        }
+
+        .tech-item:nth-child(1) { animation-delay: 1.0s; }
+        .tech-item:nth-child(2) { animation-delay: 1.2s; }
+        .tech-item:nth-child(3) { animation-delay: 1.4s; }
+        .tech-item:nth-child(4) { animation-delay: 1.6s; }
+        .tech-item:nth-child(5) { animation-delay: 1.8s; }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .tech-item-title {
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .tech-item-desc {
+            font-size: 15px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        /* PHASE 3: BUSINESS IMPACT */
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .impact-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            opacity: 0;
+            animation: scaleIn 0.6s ease forwards;
+        }
+
+        .impact-card:nth-child(1) { animation-delay: 0.2s; }
+        .impact-card:nth-child(2) { animation-delay: 0.6s; }
+        .impact-card:nth-child(3) { animation-delay: 1.0s; }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .impact-stat {
+            font-size: 72px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        .impact-stat sup {
+            font-size: 28px;
+            opacity: 0.7;
+            margin-left: 4px;
+        }
+
+        .impact-label {
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .cta-section {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            padding: 50px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 0.8s ease forwards;
+            animation-delay: 1.4s;
+        }
+
+        .cta-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .cta-points {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            margin-top: 40px;
+        }
+
+        .cta-point {
+            font-size: 20px;
+            font-weight: 600;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+        }
+
+        /* NAVIGATION */
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 60px;
+        }
+
+        .btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 16px 40px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: rgba(39, 174, 96, 0.3);
+            border-color: rgba(39, 174, 96, 0.5);
+        }
+
+        .btn-primary:hover {
+            background: rgba(39, 174, 96, 0.5);
+        }
+
+        .phase-indicator {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 14px;
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* SOURCES SECTION */
+        .sources-section {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 40px;
+            margin-top: 40px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease forwards;
+            animation-delay: 1.8s;
+        }
+
+        .sources-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 28px;
+            text-align: center;
+            opacity: 0.95;
+        }
+
+        .sources-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .source-item {
+            display: flex;
+            gap: 16px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border-left: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .source-number {
+            font-weight: 700;
+            font-size: 20px;
+            opacity: 0.8;
+            min-width: 30px;
+        }
+
+        .source-content {
+            flex: 1;
+        }
+
+        .source-name {
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .source-desc {
+            font-size: 13px;
+            opacity: 0.85;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .source-link {
+            color: #FFD700;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            transition: opacity 0.3s ease;
+        }
+
+        .source-link:hover {
+            opacity: 0.7;
+        }
+
+        @media (max-width: 1200px) {
+            .flow-stages {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .tech-grid, .impact-grid, .cta-points, .sources-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>How AI & Open Banking Transform Lending</h1>
+            <p>A Visual Journey Through the Demo</p>
+        </div>
+
+        <!-- PHASE 1: OVERVIEW -->
+        <div class="phase phase-1 active">
+            <div class="flow-stages">
+                <div class="stage">
+                    <span class="stage-icon">📋</span>
+                    <div class="stage-title">Application</div>
+                    <div class="stage-desc">Marcus Johnson applies for $5,000 auto loan. Credit score: 620.</div>
+                </div>
+
+                <div class="stage decline">
+                    <span class="stage-icon">❌</span>
+                    <div class="stage-title">Traditional: DECLINE</div>
+                    <div class="stage-desc">Unable to verify gig economy income. Score below threshold.</div>
+                </div>
+
+                <div class="stage approve">
+                    <span class="stage-icon">✅</span>
+                    <div class="stage-title">AI-Enhanced: APPROVE</div>
+                    <div class="stage-desc">Perfect payment history + verified income = Low risk borrower.</div>
+                </div>
+
+                <div class="stage impact">
+                    <span class="stage-icon">🎯</span>
+                    <div class="stage-title">Business Impact</div>
+                    <div class="stage-desc">Member served. Portfolio grown. Mission fulfilled.</div>
+                </div>
+            </div>
+
+            <div class="phase-indicator">Phase 1 of 3: Overview</div>
+        </div>
+
+        <!-- PHASE 2: TECH BREAKDOWN -->
+        <div class="phase phase-2">
+            <div class="tech-grid">
+                <div class="tech-section">
+                    <div class="tech-header">
+                        <span class="tech-icon">🏦</span>
+                        <div class="tech-title">Open Banking</div>
+                    </div>
+                    <div class="tech-items">
+                        <div class="tech-item">
+                            <div class="tech-item-title">Multi-Bank Account Access</div>
+                            <div class="tech-item-desc">Securely connects to member accounts across all institutions</div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-item-title">Income Verification</div>
+                            <div class="tech-item-desc">Real-time verification of gig economy deposits ($2,400/mo)</div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-item-title">Payment History</div>
+                            <div class="tech-item-desc">24 months of perfect on-time payments across all accounts</div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-item-title">Spending Patterns</div>
+                            <div class="tech-item-desc">Consistent savings rate despite variable income</div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-item-title">Member Consent & Control</div>
+                            <div class="tech-item-desc">Explicit permission, revocable access, bank-level security</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tech-section">
+                    <div class="tech-header">
+                        <span class="tech-icon">🤖</span>
+                        <div class="tech-title">Agentic AI</div>
+                    </div>
+                    <div class="tech-items">
+                        <div class="tech-item">
+                            <div class="tech-item-title">Pattern Recognition</div>
+                            <div class="tech-item-desc">Identifies reliable income patterns traditional systems miss</div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-item-title">Behavioral Analysis</div>
+                            <div class="tech-item-desc">Evaluates financial discipline beyond credit scores</div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-item-title">Risk Assessment</div>
+                            <div class="tech-item-desc">Calculates true creditworthiness using complete data</div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-item-title">Transparent Reasoning</div>
+                            <div class="tech-item-desc">Explains decisions in plain English for human review</div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-item-title">Continuous Learning</div>
+                            <div class="tech-item-desc">Improves accuracy with each approved loan performance</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="phase-indicator">Phase 2 of 3: Technology Breakdown</div>
+        </div>
+
+        <!-- PHASE 3: BUSINESS IMPACT -->
+        <div class="phase phase-3">
+            <div class="impact-grid">
+                <div class="impact-card">
+                    <div class="impact-stat">27%<sup>[1]</sup></div>
+                    <div class="impact-label">More Qualified Borrowers Approved</div>
+                </div>
+
+                <div class="impact-card">
+                    <div class="impact-stat">59M+<sup>[2]</sup></div>
+                    <div class="impact-label">Americans in Gig Economy Now Serviceable</div>
+                </div>
+
+                <div class="impact-card">
+                    <div class="impact-stat">40%<sup>[3]</sup></div>
+                    <div class="impact-label">Reduction in Default Risk Through Better Data</div>
+                </div>
+            </div>
+
+            <div class="cta-section">
+                <div class="cta-title">Why This Matters for Credit Unions</div>
+                <div class="cta-points">
+                    <div class="cta-point">🎯 Serve members traditional systems decline</div>
+                    <div class="cta-point">💪 Compete with fintechs at their own game</div>
+                    <div class="cta-point">🤝 Live your mission of financial inclusion</div>
+                </div>
+                <div class="cta-points" style="margin-top: 24px;">
+                    <div class="cta-point">📊 Lower risk through better data</div>
+                    <div class="cta-point">⚡ Faster decisions, happier members</div>
+                    <div class="cta-point">🚀 Technology is ready today</div>
+                </div>
+            </div>
+
+            <!-- SOURCES SECTION -->
+            <div class="sources-section">
+                <div class="sources-title">📚 Sources & Citations</div>
+                <div class="sources-grid">
+                    <div class="source-item">
+                        <div class="source-number">[1]</div>
+                        <div class="source-content">
+                            <div class="source-name">Upstart AI Lending Platform</div>
+                            <div class="source-desc">AI lending platform demonstrating 27% approval rate increase while maintaining default rates</div>
+                            <a href="https://www.upstart.com" target="_blank" class="source-link">upstart.com →</a>
+                        </div>
+                    </div>
+
+                    <div class="source-item">
+                        <div class="source-number">[2]</div>
+                        <div class="source-content">
+                            <div class="source-name">Bureau of Labor Statistics & Upwork 2025</div>
+                            <div class="source-desc">Current gig economy workforce statistics: 59-78 million Americans (36% of total workforce)</div>
+                            <a href="https://www.upwork.com/resources/gig-economy-statistics" target="_blank" class="source-link">Upwork Gig Report →</a>
+                        </div>
+                    </div>
+
+                    <div class="source-item">
+                        <div class="source-number">[3]</div>
+                        <div class="source-content">
+                            <div class="source-name">JPMorgan Chase & Upstart Research</div>
+                            <div class="source-desc">Default risk reduction through AI-enhanced credit assessment (Upstart: 53% fewer defaults)</div>
+                            <a href="https://www.upstart.com" target="_blank" class="source-link">Upstart Case Studies →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="phase-indicator">Phase 3 of 3: Business Impact</div>
+        </div>
+
+        <!-- NAVIGATION -->
+        <div class="nav-buttons">
+            <button class="btn" onclick="previousPhase()" id="prevBtn" style="display: none;">← Previous</button>
+            <button class="btn btn-primary" onclick="nextPhase()" id="nextBtn">Next: Technology Breakdown →</button>
+            <button class="btn" onclick="resetVisualization()" id="resetBtn" style="display: none;">↺ Restart</button>
+        </div>
+    </div>
+
+    <script>
+        let currentPhase = 1;
+        const totalPhases = 3;
+
+        function showPhase(phaseNum) {
+            // Hide all phases
+            document.querySelectorAll('.phase').forEach(p => p.classList.remove('active'));
+
+            // Show current phase
+            document.querySelector(`.phase-${phaseNum}`).classList.add('active');
+
+            // Update buttons
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const resetBtn = document.getElementById('resetBtn');
+
+            prevBtn.style.display = phaseNum > 1 ? 'block' : 'none';
+
+            if (phaseNum < totalPhases) {
+                nextBtn.style.display = 'block';
+                resetBtn.style.display = 'none';
+
+                if (phaseNum === 1) {
+                    nextBtn.textContent = 'Next: Technology Breakdown →';
+                } else if (phaseNum === 2) {
+                    nextBtn.textContent = 'Next: Business Impact →';
+                }
+            } else {
+                nextBtn.style.display = 'none';
+                resetBtn.style.display = 'block';
+            }
+        }
+
+        function nextPhase() {
+            if (currentPhase < totalPhases) {
+                currentPhase++;
+                showPhase(currentPhase);
+            }
+        }
+
+        function previousPhase() {
+            if (currentPhase > 1) {
+                currentPhase--;
+                showPhase(currentPhase);
+            }
+        }
+
+        function resetVisualization() {
+            currentPhase = 1;
+            showPhase(currentPhase);
+        }
+
+        // Initialize
+        showPhase(currentPhase);
+    </script>
+</body>
+</html>

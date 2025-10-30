@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artificial CU - AI-Enhanced Lending Decision</title>
+    <style>
+        /* ========================================
+           CSS CUSTOM PROPERTIES & SETUP
+           ======================================== */
+        :root {
+            --color-primary: #2C5F7C;
+            --color-success: #27AE60;
+            --color-warning: #F39C12;
+            --color-decline: #E74C3C;
+            --color-background: #F8F9FA;
+            --color-text-dark: #2C3E50;
+            --color-text-light: #7F8C8D;
+            --color-accent: #3498DB;
+            --color-white: #FFFFFF;
+            --color-border: #E0E6ED;
+
+            --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            --font-mono: 'Courier New', monospace;
+
+            --spacing-xs: 8px;
+            --spacing-sm: 12px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            --spacing-2xl: 48px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: var(--color-background);
+            color: var(--color-text-dark);
+            line-height: 1.8;
+            font-size: 18px;
+        }
+
+        /* ========================================
+           LAYOUT STRUCTURE
+           ======================================== */
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: var(--spacing-lg);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-2xl);
+            padding-bottom: var(--spacing-lg);
+            border-bottom: 2px solid var(--color-border);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .logo-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--color-primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 28px;
+        }
+
+        .logo-text h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--color-primary);
+            line-height: 1.2;
+        }
+
+        .logo-text p {
+            font-size: 14px;
+            color: var(--color-text-light);
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        .header-right {
+            display: flex;
+            gap: var(--spacing-lg);
+            align-items: center;
+        }
+
+        .badge {
+            background: var(--color-accent);
+            color: white;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .btn-reset {
+            background: var(--color-text-light);
+            color: white;
+            border: none;
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 700;
+            transition: background 0.3s ease;
+            line-height: 1.4;
+        }
+
+        .btn-reset:hover {
+            background: var(--color-text-dark);
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* ========================================
+           SCREEN MANAGEMENT
+           ======================================== */
+        .screen {
+            display: none;
+            width: 100%;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* ========================================
+           SCREEN 1: APPLICATION FORM
+           ======================================== */
+        .screen-form {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .form-header h2 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: var(--spacing-lg);
+            color: var(--color-primary);
+            line-height: 1.2;
+        }
+
+        .form-header p {
+            font-size: 20px;
+            color: var(--color-text-light);
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: var(--spacing-md);
+            font-weight: 600;
+            color: var(--color-text-dark);
+            font-size: 16px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: var(--spacing-lg);
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            font-size: 18px;
+            font-family: var(--font-family);
+            background: var(--color-white);
+            color: var(--color-text-dark);
+            line-height: 1.4;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .form-group input:disabled {
+            background: var(--color-background);
+            color: #4A5568;
+            font-weight: 600;
+        }
+
+        .credit-score-box {
+            background: linear-gradient(135deg, #FFF3CD, #FCE5CD);
+            border: 2px solid var(--color-warning);
+            border-radius: 12px;
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+            text-align: center;
+        }
+
+        .credit-score-box label {
+            display: block;
+            margin-bottom: var(--spacing-md);
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--color-text-light);
+        }
+
+        .credit-score-value {
+            font-size: 72px;
+            font-weight: 700;
+            color: var(--color-warning);
+            font-family: var(--font-mono);
+            margin-bottom: var(--spacing-lg);
+            line-height: 1;
+        }
+
+        .credit-score-status {
+            font-size: 16px;
+            color: var(--color-text-light);
+            line-height: 1.6;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            padding: var(--spacing-lg) var(--spacing-xl);
+            font-size: 20px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+            line-height: 1.4;
+        }
+
+        .btn-primary:hover {
+            background: #1F4557;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        /* ========================================
+           SCREEN 2: TRADITIONAL ANALYSIS
+           ======================================== */
+        .screen-traditional {
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .traditional-header {
+            text-align: center;
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .traditional-header h2 {
+            font-size: 44px;
+            font-weight: 700;
+            margin-bottom: var(--spacing-lg);
+            line-height: 1.2;
+        }
+
+        .analysis-grid {
+            display: grid;
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .analysis-item {
+            background: var(--color-white);
+            border: 2px solid var(--color-border);
+            border-radius: 8px;
+            padding: var(--spacing-xl);
+        }
+
+        .analysis-item-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--color-text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .analysis-item-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--color-text-dark);
+            line-height: 1.3;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-top: var(--spacing-md);
+        }
+
+        .status-pending {
+            background: #FFF3CD;
+            color: #856404;
+        }
+
+        .status-decline {
+            background: #F8D7DA;
+            color: #721C24;
+        }
+
+        .traditional-decision {
+            background: #F8D7DA;
+            border: 2px solid var(--color-decline);
+            border-radius: 8px;
+            padding: var(--spacing-lg);
+            text-align: center;
+            margin-top: var(--spacing-lg);
+        }
+
+        .traditional-decision h3 {
+            font-size: 40px;
+            font-weight: 700;
+            color: var(--color-decline);
+            margin-bottom: var(--spacing-lg);
+            line-height: 1.2;
+        }
+
+        .traditional-decision p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .transition-message {
+            text-align: center;
+            margin-top: var(--spacing-lg);
+            font-size: 14px;
+            color: var(--color-text-light);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* ========================================
+           SCREEN 3: AI ANALYSIS DASHBOARD
+           ======================================== */
+        .screen-ai {
+            width: 100%;
+        }
+
+        .ai-header {
+            text-align: center;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .ai-header h2 {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: var(--spacing-lg);
+            line-height: 1.2;
+        }
+
+        .ai-header p {
+            font-size: 20px;
+            line-height: 1.6;
+        }
+
+        .ai-dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .data-sources-panel, .ai-reasoning-panel {
+            background: var(--color-white);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: var(--spacing-lg);
+        }
+
+        .panel-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-text-dark);
+            margin-bottom: var(--spacing-xl);
+            padding-bottom: var(--spacing-lg);
+            border-bottom: 3px solid var(--color-border);
+            line-height: 1.4;
+        }
+
+        .data-source-card {
+            background: var(--color-background);
+            border: 2px solid var(--color-border);
+            border-radius: 8px;
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+            opacity: 0.4;
+            transition: all 0.5s ease;
+            cursor: pointer;
+        }
+
+        .data-source-card:hover {
+            border-color: var(--color-accent);
+            background: rgba(52, 152, 219, 0.05);
+        }
+
+        .data-source-card.loaded {
+            opacity: 1;
+            border-color: var(--color-success);
+            box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+        }
+
+        .data-source-card .checkmark {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: var(--color-success);
+            border-radius: 50%;
+            color: white;
+            line-height: 20px;
+            text-align: center;
+            font-weight: bold;
+            margin-right: var(--spacing-sm);
+            opacity: 0;
+            animation: checkIn 0.4s ease forwards;
+        }
+
+        @keyframes checkIn {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .data-source-title {
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--color-text-dark);
+            margin-bottom: var(--spacing-md);
+            line-height: 1.4;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .source-badge {
+            display: inline-block;
+            background: #E3F2FD;
+            color: #1565C0;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
+        }
+
+        .data-source-content {
+            font-size: 15px;
+            color: var(--color-text-light);
+            line-height: 1.7;
+        }
+
+        .data-detail {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-md);
+            align-items: center;
+        }
+
+        .data-label {
+            font-weight: 600;
+            color: var(--color-text-dark);
+            font-size: 15px;
+        }
+
+        .data-value {
+            font-family: var(--font-mono);
+            font-weight: 700;
+            color: var(--color-primary);
+            font-size: 16px;
+        }
+
+        /* AI Reasoning Panel */
+        .reasoning-item {
+            margin-bottom: var(--spacing-xl);
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards;
+            padding: var(--spacing-lg);
+            background: var(--color-background);
+            border-radius: 8px;
+            border-left: 4px solid var(--color-accent);
+        }
+
+        .reasoning-item:nth-child(1) { animation-delay: 4.5s; }
+        .reasoning-item:nth-child(2) { animation-delay: 5.1s; }
+        .reasoning-item:nth-child(3) { animation-delay: 5.7s; }
+        .reasoning-item:nth-child(4) { animation-delay: 6.3s; }
+        .reasoning-item:nth-child(5) { animation-delay: 6.9s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .reasoning-header {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .reasoning-icon {
+            font-size: 24px;
+            min-width: 28px;
+            flex-shrink: 0;
+        }
+
+        .reasoning-title {
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--color-text-dark);
+            line-height: 1.3;
+        }
+
+        .reasoning-text {
+            font-size: 17px;
+            color: #3A4556;
+            font-weight: 600;
+            font-family: var(--font-mono);
+            line-height: 1.7;
+            margin-left: 52px;
+        }
+
+        .reasoning-item.warning .reasoning-title {
+            color: var(--color-warning);
+        }
+
+        .reasoning-item.success .reasoning-icon {
+            color: var(--color-success);
+        }
+
+        .reasoning-item.warning .reasoning-icon {
+            color: var(--color-warning);
+        }
+
+        .reasoning-item::before {
+            content: "🤖 AI Analysis";
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            color: #8B2CA3;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: var(--spacing-md);
+            background: #F3E5F5;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 4px;
+            width: fit-content;
+        }
+
+        /* Tech Stack Legend */
+        .tech-stack-legend {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+            padding: var(--spacing-lg);
+            background: #F5F7FA;
+            border-radius: 8px;
+            border: 2px solid var(--color-border);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-md);
+        }
+
+        .legend-icon {
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+
+        .legend-content h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--color-text-dark);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .legend-content p {
+            font-size: 13px;
+            color: var(--color-text-light);
+            line-height: 1.5;
+        }
+
+        /* Data sources section styling */
+        .data-sources-panel {
+            position: relative;
+        }
+
+        /* AI reasoning section styling */
+        .ai-reasoning-panel {
+            position: relative;
+        }
+
+        /* Panel divider */
+        .panel-divider {
+            text-align: center;
+            margin: var(--spacing-xl) 0;
+            font-size: 24px;
+        }
+
+        /* Decision Panel */
+        .decision-panel {
+            background: linear-gradient(135deg, #D4EDDA, #E8F5E9);
+            border: 3px solid var(--color-success);
+            border-radius: 12px;
+            padding: var(--spacing-2xl);
+            text-align: center;
+            margin-bottom: var(--spacing-lg);
+            opacity: 0;
+            animation: slideUp 0.6s ease forwards;
+            animation-delay: 7.5s;
+            position: relative;
+        }
+
+        .decision-panel::before {
+            content: "🤖 AI DECISION";
+            position: absolute;
+            top: var(--spacing-lg);
+            right: var(--spacing-lg);
+            background: #F3E5F5;
+            color: #8B2CA3;
+            padding: var(--spacing-xs) var(--spacing-md);
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .decision-recommendation {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--color-success);
+            margin-bottom: var(--spacing-xl);
+            line-height: 1.2;
+        }
+
+        .decision-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .decision-stat {
+            background: var(--color-white);
+            border-radius: 8px;
+            padding: var(--spacing-md);
+        }
+
+        .decision-stat-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--color-text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .decision-stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--color-primary);
+            font-family: var(--font-mono);
+            line-height: 1.2;
+        }
+
+        .confidence-score {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-md);
+            padding: var(--spacing-lg);
+            background: var(--color-white);
+            border-radius: 8px;
+            margin-top: var(--spacing-lg);
+        }
+
+        .confidence-label {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--color-text-dark);
+        }
+
+        .confidence-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--color-success);
+            font-family: var(--font-mono);
+            line-height: 1;
+        }
+
+        /* Comparison Box */
+        .comparison-box {
+            background: var(--color-white);
+            border: 2px solid var(--color-border);
+            border-radius: 12px;
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+            opacity: 0;
+            animation: fadeIn 0.6s ease forwards;
+            animation-delay: 7.5s;
+            position: relative;
+        }
+
+        .comparison-box::before {
+            content: "🤖 AI vs Traditional";
+            display: block;
+            text-align: center;
+            margin-bottom: var(--spacing-lg);
+            background: #F3E5F5;
+            color: #8B2CA3;
+            padding: var(--spacing-md);
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .comparison-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--color-text-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: var(--spacing-xl);
+            text-align: center;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-lg);
+        }
+
+        .comparison-item h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-lg);
+            border-bottom: 3px solid var(--color-border);
+            line-height: 1.3;
+        }
+
+        .comparison-item.traditional h4 {
+            color: var(--color-decline);
+            border-bottom-color: var(--color-decline);
+        }
+
+        .comparison-item.ai h4 {
+            color: var(--color-success);
+            border-bottom-color: var(--color-success);
+        }
+
+        .comparison-decision {
+            font-weight: 700;
+            font-size: 24px;
+            margin-bottom: var(--spacing-lg);
+            line-height: 1.3;
+        }
+
+        .comparison-decision.decline {
+            color: var(--color-decline);
+        }
+
+        .comparison-decision.approve {
+            color: var(--color-success);
+        }
+
+        .comparison-reasoning {
+            font-size: 15px;
+            color: var(--color-text-light);
+            line-height: 1.7;
+        }
+
+        /* Toggle Controls */
+        .controls {
+            display: flex;
+            gap: var(--spacing-lg);
+            justify-content: center;
+            margin-top: var(--spacing-xl);
+            flex-wrap: wrap;
+        }
+
+        .btn-secondary {
+            background: var(--color-white);
+            color: var(--color-accent);
+            border: 2px solid var(--color-accent);
+            padding: var(--spacing-md) var(--spacing-xl);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            line-height: 1.4;
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-accent);
+            color: white;
+        }
+
+        .btn-secondary.active {
+            background: var(--color-accent);
+            color: white;
+        }
+
+        /* Expandable Section */
+        .expandable-section {
+            background: var(--color-white);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: var(--spacing-lg);
+            opacity: 0;
+            animation: fadeIn 0.6s ease forwards;
+            animation-delay: 7.5s;
+        }
+
+        .expandable-header {
+            background: var(--color-background);
+            padding: var(--spacing-lg);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s ease;
+        }
+
+        .expandable-header:hover {
+            background: #EDF2F7;
+        }
+
+        .expandable-title {
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--color-text-dark);
+            line-height: 1.4;
+        }
+
+        .expandable-toggle {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+
+        .expandable-toggle.open {
+            transform: rotate(180deg);
+        }
+
+        .expandable-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .expandable-content.open {
+            max-height: 1000px;
+        }
+
+        .expandable-text {
+            padding: var(--spacing-xl);
+            font-size: 15px;
+            color: var(--color-text-light);
+            line-height: 1.8;
+        }
+
+        .explanation-section {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .explanation-section h4 {
+            font-weight: 700;
+            color: var(--color-text-dark);
+            margin-bottom: var(--spacing-lg);
+            font-size: 16px;
+        }
+
+        .explanation-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .explanation-list li {
+            padding-left: var(--spacing-lg);
+            margin-bottom: var(--spacing-md);
+            position: relative;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        .explanation-list li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--color-accent);
+            font-weight: bold;
+        }
+
+        /* Footer / Compliance */
+        .compliance-footer {
+            background: var(--color-background);
+            border-top: 1px solid var(--color-border);
+            padding: var(--spacing-xl);
+            margin-top: var(--spacing-2xl);
+            text-align: center;
+            font-size: 14px;
+            color: var(--color-text-light);
+            line-height: 1.8;
+        }
+
+        .compliance-badges {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-md);
+            flex-wrap: wrap;
+        }
+
+        .compliance-badge {
+            background: var(--color-white);
+            border: 1px solid var(--color-border);
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        /* ========================================
+           RESPONSIVE DESIGN
+           ======================================== */
+        @media (max-width: 1200px) {
+            .ai-dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .decision-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: var(--spacing-md);
+            }
+
+            header {
+                flex-direction: column;
+                gap: var(--spacing-lg);
+                margin-bottom: var(--spacing-lg);
+            }
+
+            .logo {
+                justify-content: center;
+            }
+
+            .header-right {
+                justify-content: center;
+                width: 100%;
+            }
+
+            .form-header h2 {
+                font-size: 24px;
+            }
+
+            .ai-header h2 {
+                font-size: 24px;
+            }
+
+            .decision-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .btn-secondary {
+                width: 100%;
+            }
+        }
+
+        /* ========================================
+           PRINT & PRESENTATION OPTIMIZATIONS
+           ======================================== */
+        @media print {
+            header, .btn-reset, .controls {
+                display: none;
+            }
+        }
+
+        /* High contrast for presentation screens */
+        @media (prefers-contrast: more) {
+            :root {
+                --color-text-dark: #000000;
+                --color-border: #999999;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <header>
+            <div class="logo">
+                <div class="logo-icon">A</div>
+                <div class="logo-text">
+                    <h1>Artificial CU</h1>
+                    <p>Member-First Lending</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="badge">AI-Enhanced Analysis</div>
+                <button class="btn-reset" onclick="resetDemo()">Start Over</button>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <main>
+            <!-- SCREEN 1: APPLICATION FORM -->
+            <div class="screen screen-form active">
+                <div class="form-header">
+                    <h2>Loan Application</h2>
+                    <p>Auto Loan Application - Quick Pre-Qualification</p>
+                </div>
+
+                <form onsubmit="submitApplication(event)">
+                    <div class="form-group">
+                        <label>Member Name</label>
+                        <input type="text" value="Marcus Johnson" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Loan Amount Requested</label>
+                        <input type="text" value="$5,000" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Loan Purpose</label>
+                        <input type="text" value="Used Auto Purchase" disabled>
+                    </div>
+
+                    <div class="credit-score-box">
+                        <label>Traditional Credit Score</label>
+                        <div class="credit-score-value">620</div>
+                        <div class="credit-score-status">Below preferred threshold (660+)</div>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Analyze Application</button>
+                </form>
+            </div>
+
+            <!-- SCREEN 2: TRADITIONAL ANALYSIS -->
+            <div class="screen screen-traditional">
+                <div class="traditional-header">
+                    <h2>Traditional Credit Analysis</h2>
+                    <p>Evaluating with conventional underwriting criteria...</p>
+                </div>
+
+                <div class="analysis-grid">
+                    <div class="analysis-item">
+                        <div class="analysis-item-label">Credit Score</div>
+                        <div class="analysis-item-value">620</div>
+                        <div class="status-badge status-decline">Below Threshold</div>
+                    </div>
+
+                    <div class="analysis-item">
+                        <div class="analysis-item-label">Debt-to-Income Ratio</div>
+                        <div class="analysis-item-value">Unable to Calculate</div>
+                        <div class="status-badge status-pending">Insufficient Documentation</div>
+                    </div>
+
+                    <div class="analysis-item">
+                        <div class="analysis-item-label">Employment Verification</div>
+                        <div class="analysis-item-value">Gig Economy</div>
+                        <div class="status-badge status-pending">Pending Verification</div>
+                    </div>
+                </div>
+
+                <div class="traditional-decision">
+                    <h3>⚠️ LIKELY DECLINE</h3>
+                    <p>Unable to verify sufficient documented income with traditional methods</p>
+                </div>
+
+                <div style="text-align: center; margin-top: var(--spacing-xl);">
+                    <button class="btn-primary" onclick="continueToAIAnalysis()" style="max-width: 500px; margin: 0 auto;">
+                        Continue to AI Analysis with Open Banking
+                    </button>
+                </div>
+            </div>
+
+            <!-- SCREEN 3: AI ANALYSIS DASHBOARD -->
+            <div class="screen screen-ai">
+                <div class="ai-header">
+                    <h2>AI-Enhanced Credit Analysis</h2>
+                    <p>🏦 Open Banking Data + 🤖 Agentic AI = Better Lending Decisions</p>
+                </div>
+
+                <!-- TECHNOLOGY LEGEND -->
+                <div class="tech-stack-legend">
+                    <div class="legend-item">
+                        <div class="legend-icon">🏦</div>
+                        <div class="legend-content">
+                            <h3>Open Banking</h3>
+                            <p>Secure access to member's financial data across multiple banks and accounts</p>
+                        </div>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-icon">🤖</div>
+                        <div class="legend-content">
+                            <h3>Agentic AI</h3>
+                            <p>Intelligent analysis and reasoning to make smarter lending decisions</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ai-dashboard">
+                    <!-- LEFT PANEL: DATA SOURCES -->
+                    <div class="data-sources-panel">
+                        <div class="panel-title">🏦 Step 1: Open Banking Data Collection</div>
+
+                        <!-- Data Source 1 -->
+                        <div class="data-source-card" id="source-1">
+                            <div class="data-source-title">
+                                <span class="checkmark">✓</span>
+                                Primary Account (Artificial CU)
+                                <span class="source-badge">🏦 Open Banking</span>
+                            </div>
+                            <div class="data-source-content">
+                                <div class="data-detail">
+                                    <span class="data-label">Checking</span>
+                                    <span class="data-value">$340</span>
+                                </div>
+                                <div class="data-detail">
+                                    <span class="data-label">Savings</span>
+                                    <span class="data-value">$2,100</span>
+                                </div>
+                                <div class="data-detail">
+                                    <span class="data-label">Member Since</span>
+                                    <span class="data-value">2 yrs 3 mo</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data Source 2 -->
+                        <div class="data-source-card" id="source-2">
+                            <div class="data-source-title">
+                                <span class="checkmark">✓</span>
+                                Connected Accounts (Multi-Bank)
+                                <span class="source-badge">🏦 Open Banking</span>
+                            </div>
+                            <div class="data-source-content">
+                                <div class="data-detail">
+                                    <span class="data-label">Chase Checking</span>
+                                    <span class="data-value">$890</span>
+                                </div>
+                                <div class="data-detail">
+                                    <span class="data-label">Wells Fargo Credit Card</span>
+                                    <span class="data-value">$180 / $1,200 limit</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data Source 3 -->
+                        <div class="data-source-card" id="source-3">
+                            <div class="data-source-title">
+                                <span class="checkmark">✓</span>
+                                Income Analysis
+                                <span class="source-badge">🏦 Open Banking</span>
+                            </div>
+                            <div class="data-source-content">
+                                <div class="data-detail">
+                                    <span class="data-label">Uber (avg/month)</span>
+                                    <span class="data-value">$1,800</span>
+                                </div>
+                                <div class="data-detail">
+                                    <span class="data-label">DoorDash (avg/month)</span>
+                                    <span class="data-value">$600</span>
+                                </div>
+                                <div class="data-detail">
+                                    <span class="data-label">Total Monthly Income</span>
+                                    <span class="data-value">$2,400</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data Source 4 -->
+                        <div class="data-source-card" id="source-4">
+                            <div class="data-source-title">
+                                <span class="checkmark">✓</span>
+                                Payment History
+                                <span class="source-badge">🏦 Open Banking</span>
+                            </div>
+                            <div class="data-source-content">
+                                <div class="data-detail">
+                                    <span class="data-label">Data Period</span>
+                                    <span class="data-value">24 months</span>
+                                </div>
+                                <div class="data-detail">
+                                    <span class="data-label">On-Time Payments</span>
+                                    <span class="data-value">100%</span>
+                                </div>
+                                <div class="data-detail">
+                                    <span class="data-label">Overdrafts (18mo)</span>
+                                    <span class="data-value">0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data Source 5 -->
+                        <div class="data-source-card" id="source-5">
+                            <div class="data-source-title">
+                                <span class="checkmark">✓</span>
+                                Spending Patterns
+                                <span class="source-badge">🏦 Open Banking</span>
+                            </div>
+                            <div class="data-source-content">
+                                <div class="data-detail">
+                                    <span class="data-label">Avg Monthly Expenses</span>
+                                    <span class="data-value">$1,950</span>
+                                </div>
+                                <div class="data-detail">
+                                    <span class="data-label">Savings Rate</span>
+                                    <span class="data-value">+$200/month</span>
+                                </div>
+                                <div class="data-detail">
+                                    <span class="data-label">Spending Volatility</span>
+                                    <span class="data-value">Low</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT PANEL: AI REASONING -->
+                    <div class="ai-reasoning-panel">
+                        <div class="panel-title">🤖 Step 2: Agentic AI Analysis & Reasoning</div>
+
+                        <div class="reasoning-item success">
+                            <div class="reasoning-header">
+                                <span class="reasoning-icon">✓</span>
+                                <div class="reasoning-title">Income Verification</div>
+                            </div>
+                            <div class="reasoning-text">
+                                Despite non-traditional income sources, Marcus demonstrates consistent earnings of $2,400/month across gig platforms. Income pattern shows reliability over 24 months.
+                            </div>
+                        </div>
+
+                        <div class="reasoning-item success">
+                            <div class="reasoning-header">
+                                <span class="reasoning-icon">✓</span>
+                                <div class="reasoning-title">Payment Behavior</div>
+                            </div>
+                            <div class="reasoning-text">
+                                Perfect payment history across all accounts. This borrower prioritizes financial obligations even with variable income.
+                            </div>
+                        </div>
+
+                        <div class="reasoning-item success">
+                            <div class="reasoning-header">
+                                <span class="reasoning-icon">✓</span>
+                                <div class="reasoning-title">Cash Flow Management</div>
+                            </div>
+                            <div class="reasoning-text">
+                                Maintains positive savings trajectory (+$200/month average). Strong financial discipline evident in spending patterns.
+                            </div>
+                        </div>
+
+                        <div class="reasoning-item success">
+                            <div class="reasoning-header">
+                                <span class="reasoning-icon">✓</span>
+                                <div class="reasoning-title">Current Capacity</div>
+                            </div>
+                            <div class="reasoning-text">
+                                Monthly payment of $150 represents 6.25% of monthly income. Well within affordable range given expense patterns.
+                            </div>
+                        </div>
+
+                        <div class="reasoning-item warning">
+                            <div class="reasoning-header">
+                                <span class="reasoning-icon">⚠️</span>
+                                <div class="reasoning-title">Credit Score Context</div>
+                            </div>
+                            <div class="reasoning-text">
+                                Traditional score of 620 does not reflect actual credit risk. Score impacted by thin credit file and gig economy income structure, not by payment behavior or financial management.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DECISION PANEL -->
+                <div class="decision-panel">
+                    <div class="decision-recommendation">✓ RECOMMENDATION: APPROVE</div>
+
+                    <div class="decision-grid">
+                        <div class="decision-stat">
+                            <div class="decision-stat-label">Risk Assessment</div>
+                            <div class="decision-stat-value">LOW</div>
+                        </div>
+                        <div class="decision-stat">
+                            <div class="decision-stat-label">Suggested Rate</div>
+                            <div class="decision-stat-value">6.75%</div>
+                        </div>
+                        <div class="decision-stat">
+                            <div class="decision-stat-label">Monthly Payment</div>
+                            <div class="decision-stat-value">$149.50</div>
+                        </div>
+                    </div>
+
+                    <div class="confidence-score">
+                        <span class="confidence-label">Confidence Score:</span>
+                        <span class="confidence-value">94%</span>
+                    </div>
+                </div>
+
+                <!-- COMPARISON BOX -->
+                <div class="comparison-box">
+                    <div class="comparison-title">Traditional vs AI-Enhanced Decision</div>
+                    <div class="comparison-grid">
+                        <div class="comparison-item traditional">
+                            <h4>Traditional System</h4>
+                            <div class="comparison-decision decline">DECLINE</div>
+                            <div class="comparison-reasoning">
+                                Insufficient documented income. Credit score below threshold. Unable to verify gig economy earnings through traditional employment verification.
+                            </div>
+                        </div>
+                        <div class="comparison-item ai">
+                            <h4>AI-Enhanced System</h4>
+                            <div class="comparison-decision approve">APPROVE</div>
+                            <div class="comparison-reasoning">
+                                Strong financial management visible in verified cash flow. Perfect payment history. Realistic assessment shows low risk despite non-traditional income.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EXPANDABLE EXPLANATION -->
+                <div class="expandable-section">
+                    <div class="expandable-header" onclick="toggleExpanded(this)">
+                        <span class="expandable-title">🤖 Why this decision? (AI Reasoning - Click to expand)</span>
+                        <div class="expandable-toggle">▼</div>
+                    </div>
+                    <div class="expandable-content">
+                        <div class="expandable-text">
+                            <div class="explanation-section">
+                                <h4>How We Made This Decision</h4>
+                                <ul class="explanation-list">
+                                    <li>We accessed Marcus's financial data from connected accounts with his explicit permission</li>
+                                    <li>We analyzed 24 months of actual cash flow rather than relying solely on traditional employment verification</li>
+                                    <li>We identified consistent income patterns that traditional underwriting would miss</li>
+                                    <li>We verified perfect payment history across all financial obligations</li>
+                                    <li>We calculated realistic affordability based on actual spending patterns and income stability</li>
+                                </ul>
+                            </div>
+
+                            <div class="explanation-section">
+                                <h4>Member Privacy & Control</h4>
+                                <ul class="explanation-list">
+                                    <li>Marcus authorized this data access through secure open banking protocols</li>
+                                    <li>He can revoke access at any time</li>
+                                    <li>Data is analyzed but not stored permanently</li>
+                                    <li>He can see exactly what data we accessed and how it was used</li>
+                                    <li>All data transmission uses bank-level encryption (TLS 1.3+)</li>
+                                </ul>
+                            </div>
+
+                            <div class="explanation-section">
+                                <h4>Impact for Your Credit Union</h4>
+                                <ul class="explanation-list">
+                                    <li>This member joins a portfolio of borrowers with verified cash flow and proven repayment capacity</li>
+                                    <li>Reduced risk through data-driven assessment vs. credit score alone</li>
+                                    <li>Improved member satisfaction by approving qualified borrowers traditional systems decline</li>
+                                    <li>Competitive advantage in serving gig economy and non-traditional income borrowers</li>
+                                    <li>Alignment with credit union mission of financial inclusion</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CONTROLS -->
+                <div class="controls">
+                    <button class="btn-secondary" onclick="toggleComparison()">Compare Systems</button>
+                    <button class="btn-secondary" onclick="toggleDetails()">View Data Sources</button>
+                    <button class="btn-secondary" onclick="openVisualization()" style="background: rgba(241, 196, 15, 0.2); border-color: #F1C40F; color: #F39C12;">📊 View Flow Visualization</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- FOOTER / COMPLIANCE -->
+        <footer class="compliance-footer">
+            <div style="margin-bottom: var(--spacing-lg);">
+                <strong>Technology Stack:</strong>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-lg); margin-bottom: var(--spacing-lg); font-size: 14px;">
+                <div>
+                    <strong style="color: #1565C0;">🏦 Open Banking (Plaid/FDX)</strong>
+                    <p style="margin-top: 4px; color: var(--color-text-light);">Secure API connections to access member financial data with explicit consent</p>
+                </div>
+                <div>
+                    <strong style="color: #8B2CA3;">🤖 Agentic AI</strong>
+                    <p style="margin-top: 4px; color: var(--color-text-light);">ML models analyze patterns and provide transparent reasoning for lending decisions</p>
+                </div>
+            </div>
+            <div style="border-top: 1px solid var(--color-border); padding-top: var(--spacing-lg);">
+                Member privacy and security protected under GLBA, FCRA, and state lending laws. All decisions include human credit officer review.
+            </div>
+            <div class="compliance-badges">
+                <div class="compliance-badge">🔒 Bank-Level Encryption</div>
+                <div class="compliance-badge">✓ GLBA Compliant</div>
+                <div class="compliance-badge">✓ FCRA Compliant</div>
+                <div class="compliance-badge">✓ Member Consent Required</div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // ========================================
+        // STATE MANAGEMENT
+        // ========================================
+        let currentScreen = 'form'; // form, traditional, ai
+
+        // ========================================
+        // SCREEN NAVIGATION
+        // ========================================
+        function showScreen(screenName) {
+            // Hide all screens
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+
+            // Show target screen
+            const targetScreen = document.querySelector(`.screen-${screenName}`);
+            if (targetScreen) {
+                targetScreen.classList.add('active');
+                currentScreen = screenName;
+
+                // If showing AI screen, start data loading animations
+                if (screenName === 'ai') {
+                    startDataLoadingAnimation();
+                }
+            }
+        }
+
+        // ========================================
+        // FORM SUBMISSION
+        // ========================================
+        function submitApplication(e) {
+            e.preventDefault();
+
+            // Show traditional analysis screen
+            showScreen('traditional');
+
+            // Wait for user to click button to continue
+            // (no automatic transition)
+        }
+
+        // ========================================
+        // CONTINUE TO AI ANALYSIS
+        // ========================================
+        function continueToAIAnalysis() {
+            // Transition to AI screen
+            showScreen('ai');
+        }
+
+        // ========================================
+        // DATA LOADING ANIMATION
+        // ========================================
+        function startDataLoadingAnimation() {
+            const sources = [
+                { id: 'source-1', delay: 0 },
+                { id: 'source-2', delay: 800 },
+                { id: 'source-3', delay: 1600 },
+                { id: 'source-4', delay: 2400 },
+                { id: 'source-5', delay: 3200 }
+            ];
+
+            sources.forEach(source => {
+                setTimeout(() => {
+                    const card = document.getElementById(source.id);
+                    if (card) {
+                        card.classList.add('loaded');
+                    }
+                }, source.delay);
+            });
+        }
+
+        // ========================================
+        // INTERACTIVE CONTROLS
+        // ========================================
+        function resetDemo() {
+            // Reset to form screen
+            showScreen('form');
+
+            // Reset any open expandables
+            document.querySelectorAll('.expandable-content').forEach(content => {
+                content.classList.remove('open');
+            });
+            document.querySelectorAll('.expandable-toggle').forEach(toggle => {
+                toggle.classList.remove('open');
+            });
+        }
+
+        function toggleExpanded(header) {
+            const content = header.nextElementSibling;
+            const toggle = header.querySelector('.expandable-toggle');
+
+            if (content.classList.contains('open')) {
+                content.classList.remove('open');
+                toggle.classList.remove('open');
+            } else {
+                content.classList.add('open');
+                toggle.classList.add('open');
+            }
+        }
+
+        function toggleComparison() {
+            const comparisonBox = document.querySelector('.comparison-box');
+            if (comparisonBox) {
+                comparisonBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        function toggleDetails() {
+            const datasources = document.querySelector('.data-sources-panel');
+            if (datasources) {
+                datasources.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        function openVisualization() {
+            // Open the visualization in a new window
+            window.open('visualization.html', '_blank', 'width=1600,height=900');
+        }
+
+        // ========================================
+        // INITIALIZATION
+        // ========================================
+        document.addEventListener('DOMContentLoaded', function() {
+            // Any initialization code here
+            console.log('AI Lending Decision Demo loaded');
+        });
+    </script>
+</body>
+</html>
