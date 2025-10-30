@@ -327,6 +327,41 @@
             font-weight: 600;
             line-height: 1.5;
             color: #333;
+            margin-bottom: 24px;
+        }
+
+        .impact-source {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 2px solid var(--color-border);
+            text-align: left;
+        }
+
+        .impact-source .source-name {
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: 8px;
+            color: var(--color-primary);
+        }
+
+        .impact-source .source-desc {
+            font-size: 12px;
+            opacity: 0.85;
+            line-height: 1.5;
+            margin-bottom: 12px;
+            color: #555;
+        }
+
+        .impact-source .source-link {
+            color: var(--color-accent);
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            transition: opacity 0.3s ease;
+        }
+
+        .impact-source .source-link:hover {
+            opacity: 0.7;
         }
 
         .cta-section {
@@ -657,18 +692,33 @@
         <div class="phase phase-3">
             <div class="impact-grid">
                 <div class="impact-card">
-                    <div class="impact-stat">27%<sup>[1]</sup></div>
+                    <div class="impact-stat">27%</div>
                     <div class="impact-label">More Qualified Borrowers Approved</div>
+                    <div class="impact-source">
+                        <div class="source-name">Consumer Financial Protection Bureau (CFPB)</div>
+                        <div class="source-desc">Alternative credit models approved 27% more applicants than traditional lending, with lower APRs and no increase in default rates</div>
+                        <a href="https://www.consumerfinance.gov/about-us/blog/update-credit-access-and-no-action-letter/" target="_blank" class="source-link">CFPB Blog Post (2019) →</a>
+                    </div>
                 </div>
 
                 <div class="impact-card">
-                    <div class="impact-stat">76.4M<sup>[2]</sup></div>
+                    <div class="impact-stat">76.4M</div>
                     <div class="impact-label">Americans in Gig Economy Now Serviceable</div>
+                    <div class="impact-source">
+                        <div class="source-name">Exploding Topics (2024)</div>
+                        <div class="source-desc">Current gig economy workforce: 76.4 million freelancers in the US (up from 73.3M in 2023), growing ~2M per year</div>
+                        <a href="https://explodingtopics.com/blog/number-of-freelancers" target="_blank" class="source-link">Gig Economy Statistics →</a>
+                    </div>
                 </div>
 
                 <div class="impact-card">
-                    <div class="impact-stat">2x<sup>[3]</sup></div>
+                    <div class="impact-stat">2x</div>
                     <div class="impact-label">Approval Rate for Near-Prime Borrowers (FICO 620-660)</div>
+                    <div class="impact-source">
+                        <div class="source-name">Consumer Financial Protection Bureau (CFPB)</div>
+                        <div class="source-desc">Near-prime borrowers (FICO 620-660) were approved approximately 2x as frequently with alternative credit models</div>
+                        <a href="https://www.consumerfinance.gov/about-us/blog/update-credit-access-and-no-action-letter/" target="_blank" class="source-link">CFPB Blog Post (2019) →</a>
+                    </div>
                 </div>
             </div>
 
@@ -686,38 +736,6 @@
                 </div>
             </div>
 
-            <!-- SOURCES SECTION -->
-            <div class="sources-section">
-                <div class="sources-title">📚 Sources & Citations</div>
-                <div class="sources-grid">
-                    <div class="source-item">
-                        <div class="source-number">[1]</div>
-                        <div class="source-content">
-                            <div class="source-name">Consumer Financial Protection Bureau (CFPB)</div>
-                            <div class="source-desc">Alternative credit models approved 27% more applicants than traditional lending, with lower APRs and no increase in default rates</div>
-                            <a href="https://www.consumerfinance.gov/about-us/blog/update-credit-access-and-no-action-letter/" target="_blank" class="source-link">CFPB Blog Post (2019) →</a>
-                        </div>
-                    </div>
-
-                    <div class="source-item">
-                        <div class="source-number">[2]</div>
-                        <div class="source-content">
-                            <div class="source-name">Exploding Topics (2024)</div>
-                            <div class="source-desc">Current gig economy workforce: 76.4 million freelancers in the US (up from 73.3M in 2023), growing ~2M per year</div>
-                            <a href="https://explodingtopics.com/blog/number-of-freelancers" target="_blank" class="source-link">Gig Economy Statistics →</a>
-                        </div>
-                    </div>
-
-                    <div class="source-item">
-                        <div class="source-number">[3]</div>
-                        <div class="source-content">
-                            <div class="source-name">Consumer Financial Protection Bureau (CFPB)</div>
-                            <div class="source-desc">Near-prime borrowers (FICO 620-660) were approved approximately 2x as frequently with alternative credit models</div>
-                            <a href="https://www.consumerfinance.gov/about-us/blog/update-credit-access-and-no-action-letter/" target="_blank" class="source-link">CFPB Blog Post (2019) →</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <div class="phase-indicator">Phase 3 of 3: Business Impact</div>
         </div>
